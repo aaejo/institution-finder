@@ -18,11 +18,11 @@ public class USAInstitutionFinder implements InstitutionFinder {
     private final InstitutionsProducer institutionsProducer;
     private final URL registryURL;
 
-    public static final String[] STATES = { "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID",
-            "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-            "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV",
-            "WI", "WY", "AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI" };
-
+    // public static final String[] STATES = { "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID",
+    //         "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
+    //         "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV",
+    //         "WI", "WY", "AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI" };
+    public static final String[] STATES = { "AL", "NY", "AS" };
     public static final String PROGRAMS = "38.0104+" +
                                           "38.0103+" +
                                           "38.0102+" +
@@ -80,15 +80,15 @@ public class USAInstitutionFinder implements InstitutionFinder {
                 for (Element result : results) {
                     Element schoolElement = result.child(1); // 0 = info button, 1 = school page link, 2 = add button
                     Element schoolInfoLinkElement = schoolElement.getElementsByAttribute("href").first();
-                    String schoolInfoQuery = schoolInfoLinkElement.attr("href");
+                    String schoolInfoUrl = schoolInfoLinkElement.attr("abs:href");
                     String schoolName = schoolInfoLinkElement.text();
 
-                    log.info(schoolName + " " + schoolInfoQuery);
+                    log.info(schoolName + " " + schoolInfoUrl);
 
                     Document infoPage;
                     try {
                         infoPage = Jsoup
-                                    .connect(registryURL.toString() + schoolInfoQuery)
+                                    .connect(schoolInfoUrl)
                                     .get();
                     } catch (IOException e) {
                         log.error("Failed to get details page for " + schoolName, e);
