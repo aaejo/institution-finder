@@ -7,14 +7,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
-import io.github.aaejo.institutionfinder.messaging.producer.InstitutionsProducer;
-import io.github.aaejo.messaging.records.Institution;
+import io.github.aaejo.institutionfinder.finder.InstitutionFinder;
 
 @SpringBootApplication
 public class InstitutionFinderApplication {
 
     @Autowired
-    private InstitutionsProducer institutionsProducer;
+    private InstitutionFinder institutionFinder;
 
     public static void main(String[] args) {
         SpringApplication.run(InstitutionFinderApplication.class, args);
@@ -26,7 +25,7 @@ public class InstitutionFinderApplication {
         return args -> {
             System.out.println("Hit Enter to send...");
             System.in.read();
-            institutionsProducer.send(new Institution("this", "is", "a", "test"));
+            institutionFinder.produceInstitutions();
         };
     }
 
