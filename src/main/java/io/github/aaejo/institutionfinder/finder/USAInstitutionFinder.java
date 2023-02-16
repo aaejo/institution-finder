@@ -6,10 +6,10 @@ import java.net.URL;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import io.github.aaejo.institutionfinder.messaging.producer.InstitutionsProducer;
+import io.github.aaejo.messaging.records.Institution;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -22,7 +22,8 @@ public class USAInstitutionFinder implements InstitutionFinder {
     //         "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
     //         "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV",
     //         "WI", "WY", "AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI" };
-    public static final String[] STATES = { "AL", "NY", "AS" };
+    // public static final String[] STATES = { "AL", "NY", "AS" };
+    public static final String[] STATES = { "AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI" };
     public static final String PROGRAMS = "38.0104+" +
                                           "38.0103+" +
                                           "38.0102+" +
@@ -36,48 +37,73 @@ public class USAInstitutionFinder implements InstitutionFinder {
 
     @Override
     public void produceInstitutions() {
-        log.debug("Let's try this...");
+        log.info("Let's try this...");
 
         for (String state : STATES) {
-            Document page;
-            try {
-                page = Jsoup
-                        .connect("https://nces.ed.gov/collegenavigator/?s=" + state
-                                + "&p=" + PROGRAMS)
-                        .get();
-            } catch(IOException e) {
-                log.error("Failed to connect to College Navigator with state = " + state, e);
-                continue;
-            }
-            log.debug("State " + state);
+            int pageCount = 1;
+            boolean hasNextPage = true;
 
-            Element resultsInfo = page.getElementById("ctl00_cphCollegeNavBody_ucResultsMain_divMsg");
-            Element resultsTable = page.getElementById("ctl00_cphCollegeNavBody_ucResultsMain_tblResults");
-            Element pagingControls = page.getElementById("ctl00_cphCollegeNavBody_ucResultsMain_divPagingControls");
+            while (hasNextPage) {
+                Document page;
+                try {
+                    page = Jsoup
+                            .connect(registryURL.toString())
+                            .data("p", PROGRAMS)
+                            .data("s", state)
+                            .data("pg", Integer.toString(pageCount))
+                            .get();
+                } catch(IOException e) {
+                    log.error("Failed to connect to College Navigator with state = " + state, e);
+                    continue;
+                }
+                log.info("State " + state);
 
-            Element resultsTableBody = resultsTable.firstElementChild();
+                Element resultsTable = page.getElementById("ctl00_cphCollegeNavBody_ucResultsMain_tblResults");
+                Element resultsTableBody = resultsTable.firstElementChild();
+                Element pagingControls = page.getElementById("ctl00_cphCollegeNavBody_ucResultsMain_divPagingControls");
 
-            if (resultsTableBody == null) {
-                log.debug("No results on page");
-                continue;
-            }
-            // List<TextNode> resultsInfoText = resultsInfo.textNodes();
+                if (resultsTableBody == null) {
+                    log.info("No results on page");
+                    hasNextPage = false;
+                    continue;
+                } else if (pagingControls.selectFirst(":containsOwn(Next Page »)") != null) {
+                    log.info("Another page of results exists");
+                    hasNextPage = true;
+                    pageCount++;
+                } else {
+                    log.info("Final page of results reached");
+                    hasNextPage = false;
+                }
 
-            Elements results = resultsTableBody.select(".resultsW, .resultsY");
-            log.debug(results.size() + " results on page");
+                Elements results = resultsTableBody.select(".resultsW, .resultsY");
+                log.info(results.size() + " results on page");
 
-            for (Element result : results) {
-                Element schoolElement = result.child(1); // 0 = info button, 1 = school page link, 2 = add button
+                for (Element result : results) {
+                    Element schoolElement = result.child(1); // 0 = info button, 1 = school page link, 2 = add button
+                    Element schoolInfoLinkElement = schoolElement.getElementsByAttribute("href").first();
+                    String schoolInfoQuery = schoolInfoLinkElement.attr("href");
+                    String schoolName = schoolInfoLinkElement.text();
 
-            }
+                    log.info(schoolName + " " + schoolInfoQuery);
 
-            if (pagingControls.ownText().equals("Showing All Results")) {
-                log.debug("Only one page of results");
-            } else {
-                log.debug("Probably more than one page of results");
+                    Document infoPage;
+                    try {
+                        infoPage = Jsoup
+                                    .connect(registryURL.toString() + schoolInfoQuery)
+                                    .get();
+                    } catch (IOException e) {
+                        log.error("Failed to get details page for " + schoolName, e);
+                        continue;
+                    }
+
+                    String address = infoPage.selectFirst(".headerlg").parent().textNodes().get(0).text();
+                    String website = infoPage.selectFirst(":containsOwn(Website:)").siblingElements().first().text();
+
+                    institutionsProducer.send(new Institution(schoolName, "USA", address, website));
+                }
             }
         }
 
-        log.debug("Done");
+        log.info("Done");
     }
 }
