@@ -18,12 +18,11 @@ public class USAInstitutionFinder implements InstitutionFinder {
     private final InstitutionsProducer institutionsProducer;
     private final URL registryURL;
 
-    // public static final String[] STATES = { "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID",
-    //         "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-    //         "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV",
-    //         "WI", "WY", "AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI" };
-    // public static final String[] STATES = { "AL", "NY", "AS" };
-    public static final String[] STATES = { "AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI" };
+    public static final String[] STATES = { "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID",
+            "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
+            "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV",
+            "WI", "WY", "AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI" };
+
     public static final String PROGRAMS = "38.0104+" +
                                           "38.0103+" +
                                           "38.0102+" +
