@@ -23,11 +23,11 @@ public class USAInstitutionFinder implements InstitutionFinder {
     //         "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV",
     //         "WI", "WY", "AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI" };
     public static final String[] STATES = { "AL", "NY", "AS" };
-    public static final String PROGRAMS = "38.0104+" +
-                                          "38.0103+" +
-                                          "38.0102+" +
-                                          "38.0101+" +
-                                          "38.0199";
+    public static final String PROGRAMS = "38.0104+" +  // Applied and Professional Ethics
+                                          "38.0103+" +  // Ethics
+                                          "38.0102+" +  // Logic
+                                          "38.0101+" +  // Philosophy
+                                          "38.0199";    // Philosophy, Other
 
     public USAInstitutionFinder(InstitutionsProducer institutionsProducer, URL registryURL) {
         this.institutionsProducer = institutionsProducer;
@@ -36,29 +36,29 @@ public class USAInstitutionFinder implements InstitutionFinder {
 
     @Override
     public void produceInstitutions() {
-        log.info("Let's try this...");
+        log.info("Producing institutions for {} US states and/or territories", STATES.length);
 
         for (String state : STATES) {
-            int pageCount = 1;
-            boolean hasNextPage = true;
+            log.info("Producing for state = {}", state);
+            int pageNum = 1;
+            boolean hasNextPage = false;
 
-            while (hasNextPage) {
+            do {
                 Document page;
                 try {
                     page = Jsoup
                             .connect(registryURL.toString())
                             .data("p", PROGRAMS)
                             .data("s", state)
-                            .data("pg", Integer.toString(pageCount))
+                            .data("pg", Integer.toString(pageNum))
                             .get();
-                } catch(IOException e) {
-                    log.error("Failed to connect to College Navigator with state = " + state, e);
+                } catch (IOException e) {
+                    log.error("Failed to connect to College Navigator with state = {}", state, e);
                     continue;
                 }
-                log.info("State " + state);
 
-                Element resultsTable = page.getElementById("ctl00_cphCollegeNavBody_ucResultsMain_tblResults");
-                Element resultsTableBody = resultsTable.firstElementChild();
+                Element resultsTableBody = page
+                        .getElementById("ctl00_cphCollegeNavBody_ucResultsMain_tblResults").firstElementChild();
                 Element pagingControls = page.getElementById("ctl00_cphCollegeNavBody_ucResultsMain_divPagingControls");
 
                 if (resultsTableBody == null) {
@@ -68,41 +68,51 @@ public class USAInstitutionFinder implements InstitutionFinder {
                 } else if (pagingControls.selectFirst(":containsOwn(Next Page »)") != null) {
                     log.info("Another page of results exists");
                     hasNextPage = true;
-                    pageCount++;
+                    pageNum++;
                 } else {
                     log.info("Final page of results reached");
                     hasNextPage = false;
                 }
 
                 Elements results = resultsTableBody.select(".resultsW, .resultsY");
-                log.info(results.size() + " results on page");
+                log.info("{} results on page", results.size());
 
                 for (Element result : results) {
-                    Element schoolElement = result.child(1); // 0 = info button, 1 = school page link, 2 = add button
-                    Element schoolInfoLinkElement = schoolElement.getElementsByAttribute("href").first();
-                    String schoolInfoUrl = schoolInfoLinkElement.attr("abs:href");
-                    String schoolName = schoolInfoLinkElement.text();
+                    Element schoolInfoLink = result
+                                            .child(1) // 0 = info button, 1 = school page link, 2 = add button
+                                            .getElementsByAttribute("href")
+                                            .first();
+                    String schoolInfoUrl = schoolInfoLink.attr("abs:href");
+                    String schoolName = schoolInfoLink.text();
 
-                    log.info(schoolName + " " + schoolInfoUrl);
+                    log.info("{} {}", schoolName, schoolInfoUrl);
 
-                    Document infoPage;
-                    try {
-                        infoPage = Jsoup
-                                    .connect(schoolInfoUrl)
-                                    .get();
-                    } catch (IOException e) {
-                        log.error("Failed to get details page for " + schoolName, e);
-                        continue;
+                    Institution institution = getInstitutionDetails(schoolName, schoolInfoUrl);
+                    if (institution != null) {
+                        institutionsProducer.send(institution);
                     }
-
-                    String address = infoPage.selectFirst(".headerlg").parent().textNodes().get(0).text();
-                    String website = infoPage.selectFirst(":containsOwn(Website:)").siblingElements().first().text();
-
-                    institutionsProducer.send(new Institution(schoolName, "USA", address, website));
                 }
-            }
+            } while (hasNextPage);
         }
 
         log.info("Done");
+    }
+
+    public Institution getInstitutionDetails(String schoolName, String schoolInfoUrl) {
+
+        Document infoPage;
+        try {
+            infoPage = Jsoup
+                        .connect(schoolInfoUrl)
+                        .get();
+        } catch (IOException e) {
+            log.error("Failed to get details page for {}", schoolName, e);
+            return null;
+        }
+
+        String address = infoPage.selectFirst(".headerlg").parent().textNodes().get(0).text();
+        String website = infoPage.selectFirst(":containsOwn(Website:)").siblingElements().first().text();
+
+        return new Institution(schoolName, "USA", address, website);
     }
 }
