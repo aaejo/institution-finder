@@ -1,9 +1,9 @@
 package io.github.aaejo.institutionfinder.finder;
 
 import java.io.IOException;
-import java.net.URL;
+import java.util.Arrays;
 
-import org.jsoup.Jsoup;
+import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public class USAInstitutionFinder implements InstitutionFinder {
 
     private final InstitutionsProducer institutionsProducer;
-    private final URL registryURL;
+    private final Connection registryConnection;
 
     // public static final String[] STATES = { "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID",
     //         "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
@@ -29,9 +29,9 @@ public class USAInstitutionFinder implements InstitutionFinder {
                                           "38.0101+" +  // Philosophy
                                           "38.0199";    // Philosophy, Other
 
-    public USAInstitutionFinder(InstitutionsProducer institutionsProducer, URL registryURL) {
+    public USAInstitutionFinder(InstitutionsProducer institutionsProducer, Connection registryConnection) {
         this.institutionsProducer = institutionsProducer;
-        this.registryURL = registryURL;
+        this.registryConnection = registryConnection;
     }
 
     @Override
@@ -46,8 +46,8 @@ public class USAInstitutionFinder implements InstitutionFinder {
             do {
                 Document page;
                 try {
-                    page = Jsoup
-                            .connect(registryURL.toString())
+                    page = registryConnection
+                            .newRequest()
                             .data("p", PROGRAMS)
                             .data("s", state)
                             .data("pg", Integer.toString(pageNum))
@@ -82,12 +82,14 @@ public class USAInstitutionFinder implements InstitutionFinder {
                                             .child(1) // 0 = info button, 1 = school page link, 2 = add button
                                             .getElementsByAttribute("href")
                                             .first();
-                    String schoolInfoUrl = schoolInfoLink.attr("abs:href");
                     String schoolName = schoolInfoLink.text();
+                    String schoolId = Arrays.stream(schoolInfoLink.attr("href").split("&"))
+                            .filter(p -> p.startsWith("id") || p.startsWith("?id"))
+                            .findFirst().get().split("=")[1];
 
-                    log.info("{} {}", schoolName, schoolInfoUrl);
+                    log.info("{} id = {}", schoolName, schoolId);
 
-                    Institution institution = getInstitutionDetails(schoolName, schoolInfoUrl);
+                    Institution institution = getInstitutionDetails(schoolName, schoolId);
                     if (institution != null) {
                         institutionsProducer.send(institution);
                     }
@@ -98,12 +100,13 @@ public class USAInstitutionFinder implements InstitutionFinder {
         log.info("Done");
     }
 
-    public Institution getInstitutionDetails(String schoolName, String schoolInfoUrl) {
+    public Institution getInstitutionDetails(String schoolName, String schoolId) {
 
         Document infoPage;
         try {
-            infoPage = Jsoup
-                        .connect(schoolInfoUrl)
+            infoPage = registryConnection
+                        .newRequest()
+                        .data("id", schoolId)
                         .get();
         } catch (IOException e) {
             log.error("Failed to get details page for {}", schoolName, e);

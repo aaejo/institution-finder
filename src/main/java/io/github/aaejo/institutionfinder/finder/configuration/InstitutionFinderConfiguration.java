@@ -1,5 +1,7 @@
 package io.github.aaejo.institutionfinder.finder.configuration;
 
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.UnsatisfiedDependencyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -36,7 +38,12 @@ public class InstitutionFinderConfiguration {
                         "registryURL",
                         "USA Institution Finder must have a registry URL.");
             }
-            return new USAInstitutionFinder(institutionsProducer, properties.registryURL());
+
+            // All configuration for the Jsoup client for the USA Finder can be done here before injection.
+            Connection connection = Jsoup
+                    .connect(properties.registryURL().toString());
+
+            return new USAInstitutionFinder(institutionsProducer, connection);
         } else {
             return new JsonInstitutionFinder(properties.country().name(), institutionsProducer, objectMapper);
         }
