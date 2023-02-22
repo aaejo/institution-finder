@@ -47,32 +47,55 @@ public class USAInstitutionFinder implements InstitutionFinder {
 
     public void produceStateInstitutions(String state) {
         log.info("Producing for state = {}", state);
+
         int pageNum = 1;
+        int pageLimit = 0; // Total number of results pages. 0 if unknown.
         boolean hasNextPage = false;
 
         do {
-            Document page;
-            try {
-                page = registryConnection
-                        .newRequest()
-                        .data("p", PROGRAMS)
-                        .data("s", state)
-                        .data("pg", Integer.toString(pageNum))
-                        .get();
-            } catch (IOException e) {
-                log.error("Failed to connect to College Navigator with state = {}", state, e);
-                continue;
+            // 1. Attempt to get results page (with single retry).
+            Document resultsPage = getResultsPage(state, pageNum);
+
+            if (resultsPage == null // 2. If getting the results page failed, and
+                && ((pageLimit != 0 && pageNum < pageLimit) // 2.1. either the current page is within the known page limit
+                    || (pageLimit == 0))) { // 2.2 or the page limit is unknown (eg when the first page failed to load).
+                
+                // 2.3. Then move onto the next page and attempt to get that instead (with single retry).
+                pageNum++;
+                resultsPage = getResultsPage(state, pageNum);
             }
 
-            Element resultsTableBody = page
+            // 3. If trying the next page also failed, stop processing this state.
+            if (resultsPage == null) {
+                return;
+            }
+
+            Element resultsTableBody = resultsPage
                     .getElementById("ctl00_cphCollegeNavBody_ucResultsMain_tblResults").firstElementChild();
-            Element pagingControls = page.getElementById("ctl00_cphCollegeNavBody_ucResultsMain_divPagingControls");
+            Element pagingControls = resultsPage.getElementById("ctl00_cphCollegeNavBody_ucResultsMain_divPagingControls");
 
             if (resultsTableBody == null) {
                 log.info("No results on page");
                 hasNextPage = false;
                 continue;
-            } else if (pagingControls.selectFirst(":containsOwn(Next Page »)") != null) {
+            }
+
+            if (pageLimit == 0) { // If pageLimit is unknown, let's figure it out
+                if (pagingControls.text().equals("Showing All Results")) {
+                    pageLimit = 1;
+                } else {
+                    String[] pagingControlsTextTokens = pagingControls.text().split(" ");
+                    String finalToken = pagingControlsTextTokens[pagingControlsTextTokens.length - 1];
+                    try {
+                        pageLimit = Integer.parseInt(finalToken);
+                    } catch (NumberFormatException e) {
+                        log.debug("Failed to determine page limit from paging controls. Checked token = {}", finalToken);
+                    }
+                }
+            }
+
+            if ((pageLimit != 0 && pageNum < pageLimit) // Page limit is known and current page is within it
+                    || pagingControls.selectFirst(":containsOwn(Next Page »)") != null) { // Backup check if next page button exists
                 log.info("Another page of results exists");
                 hasNextPage = true;
                 pageNum++;
@@ -105,15 +128,35 @@ public class USAInstitutionFinder implements InstitutionFinder {
     }
 
     public Institution getInstitutionDetails(String schoolName, String schoolId) {
+        Document infoPage = null;
+        boolean retry = false;
 
-        Document infoPage;
-        try {
-            infoPage = registryConnection
-                        .newRequest()
-                        .data("id", schoolId)
-                        .get();
-        } catch (IOException e) {
-            log.error("Failed to get details page for {}", schoolName, e);
+        do {
+            try {
+                infoPage = registryConnection
+                            .newRequest()
+                            .data("id", schoolId)
+                            .get();
+
+                if (retry) {
+                    retry = false; // Stop retrying when succeeded after retry
+                }
+            } catch (IOException e) {
+                if (retry) {
+                    log.error("Failed to get details page for {} on retry", schoolName, e);
+                    return null;
+                } else {
+                    log.error("Failed to get details page for {}, will retry", schoolName, e);
+                    retry = true;
+                }
+            }
+        } while (retry);
+
+        /*
+         * This should never happen but if somehow we've reached here with a null infoPage even
+         * after the retry and early return, just return null for safety.
+         */
+        if (infoPage == null) {
             return null;
         }
 
@@ -121,5 +164,42 @@ public class USAInstitutionFinder implements InstitutionFinder {
         String website = infoPage.selectFirst(":containsOwn(Website:)").siblingElements().first().text();
 
         return new Institution(schoolName, "USA", address, website);
+    }
+
+    /**
+     * Get a College Naviagtor search results page for a certain state. Will retry once.
+     *
+     * @param state 2-letter state abbreviation
+     * @param page  page number of results to fetch
+     * @return      page contents as a Jsoup Document, or null
+     */
+    private Document getResultsPage(String state, int page) {
+        Document resultsPage = null;
+        boolean retry = false;
+
+        do {
+            try {
+                resultsPage = registryConnection
+                        .newRequest()
+                        .data("p", PROGRAMS)
+                        .data("s", state)
+                        .data("pg", Integer.toString(page))
+                        .get();
+
+                if (retry) {
+                    retry = false; // Stop retrying when succeeded after retry
+                }
+            } catch (IOException e) {
+                if (retry) {
+                    log.error("Failed to connect to College Navigator with state = {} on retry", state, e);
+                    retry = false;
+                } else {
+                    log.error("Failed to connect to College Navigator with state = {}, will retry", state, e);
+                    retry = true;
+                }
+            }
+        } while (retry);
+
+        return resultsPage;
     }
 }
