@@ -1,6 +1,7 @@
 package io.github.aaejo.institutionfinder.unit.finder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 import java.io.File;
@@ -38,6 +39,17 @@ public class USAInstitutionFinderTests {
     }
 
     @Test
+    void getInstitutionDetails_failToGetPage_returnNull() throws IOException {
+        setupSchoolInfoExceptionMock();
+        String schoolName = "University of California-Berkeley";
+        String schoolId = "110635";
+
+        Institution actual = usaFinder.getInstitutionDetails(schoolName, schoolId);
+
+        assertNull(actual);
+    }
+
+    @Test
     void produceStateInstitutions_noResults_sucessfulProcessing() throws IOException {
         setupSchoolInfoMock();
         setupASMock();
@@ -55,6 +67,22 @@ public class USAInstitutionFinderTests {
         usaFinder.produceStateInstitutions("AL");
 
         verify(institutionsProducer, times(9)).send(any(Institution.class));
+    }
+
+    @Test
+    void produceStateInstitutions_getInstitutionDetailsFailsOnce_remainingStillSent() throws IOException {
+        setupSchoolInfoMock();
+        setupALMock();
+        // One of the IDs will throw, rest will still work
+        when(connection
+                .newRequest()
+                .data(eq("id"), eq("100751"))
+                .get())
+            .thenThrow(new IOException());
+
+        usaFinder.produceStateInstitutions("AL");
+
+        verify(institutionsProducer, times(8)).send(any(Institution.class));
     }
 
     @Test
