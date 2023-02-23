@@ -12,6 +12,9 @@ import io.github.aaejo.institutionfinder.messaging.producer.InstitutionsProducer
 import io.github.aaejo.messaging.records.Institution;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * USA-specific InstitutionFinder implementation utilizing NCES's College Navigator service.
+ */
 @Slf4j
 public class USAInstitutionFinder implements InstitutionFinder {
 
@@ -34,6 +37,9 @@ public class USAInstitutionFinder implements InstitutionFinder {
         this.registryConnection = registryConnection;
     }
 
+    /**
+     * Produce institutions from College Navigator, using the program codes specified in {@code USAInstitutionFinder.PROGRAMS}.
+     */
     @Override
     public void produceInstitutions() {
         log.info("Producing institutions for {} US states and/or territories", STATES.length);
@@ -45,6 +51,16 @@ public class USAInstitutionFinder implements InstitutionFinder {
         log.info("Done");
     }
 
+    /**
+     * Produce institutions for a single US state or territory.
+     *
+     * Results are loaded from College Navigator. If a page of results fails to load, it will be retried once.
+     * If the retry also fails, the next page will be tried unless it is known that no next page exists.
+     * If two consecutive pages fail, the process will end for the state. Any previous institutions will still
+     * have been produced.
+     *
+     * @param state the state (or territory) to find institutions for.
+     */
     public void produceStateInstitutions(String state) {
         log.info("Producing for state = {}", state);
 
@@ -59,7 +75,8 @@ public class USAInstitutionFinder implements InstitutionFinder {
             if (resultsPage == null // 2. If getting the results page failed, and
                 && ((pageLimit != 0 && pageNum < pageLimit) // 2.1. either the current page is within the known page limit
                     || (pageLimit == 0))) { // 2.2 or the page limit is unknown (eg when the first page failed to load).
-                
+                log.warn("Failed to load page {} of results, attempting next page.", pageNum);
+
                 // 2.3. Then move onto the next page and attempt to get that instead (with single retry).
                 pageNum++;
                 resultsPage = getResultsPage(state, pageNum);
@@ -67,6 +84,7 @@ public class USAInstitutionFinder implements InstitutionFinder {
 
             // 3. If trying the next page also failed, stop processing this state.
             if (resultsPage == null) {
+                log.error("Results page loading failing consistently, not continuing with this state.");
                 return;
             }
 
@@ -117,7 +135,7 @@ public class USAInstitutionFinder implements InstitutionFinder {
                         .filter(p -> p.startsWith("id") || p.startsWith("?id"))
                         .findFirst().get().split("=")[1];
 
-                log.info("{} id = {}", schoolName, schoolId);
+                log.debug("{} id = {}", schoolName, schoolId);
 
                 Institution institution = getInstitutionDetails(schoolName, schoolId);
                 if (institution != null) {
@@ -127,6 +145,14 @@ public class USAInstitutionFinder implements InstitutionFinder {
         } while (hasNextPage);
     }
 
+    /**
+     * Get information on an institution by querying College Navigator for a school ID.
+     * Will retry once if the connection fails.
+     *
+     * @param schoolName    name of the institution being queried for
+     * @param schoolId      College Navigator ID for the institution being queried for
+     * @return              a complete Institution record, or null if unable to load the page
+     */
     public Institution getInstitutionDetails(String schoolName, String schoolId) {
         Document infoPage = null;
         boolean retry = false;
@@ -146,7 +172,7 @@ public class USAInstitutionFinder implements InstitutionFinder {
                     log.error("Failed to get details page for {} on retry", schoolName, e);
                     return null;
                 } else {
-                    log.error("Failed to get details page for {}, will retry", schoolName, e);
+                    log.warn("Failed to get details page for {}, will retry", schoolName, e);
                     retry = true;
                 }
             }
@@ -194,7 +220,7 @@ public class USAInstitutionFinder implements InstitutionFinder {
                     log.error("Failed to connect to College Navigator with state = {} on retry", state, e);
                     retry = false;
                 } else {
-                    log.error("Failed to connect to College Navigator with state = {}, will retry", state, e);
+                    log.warn("Failed to connect to College Navigator with state = {}, will retry", state, e);
                     retry = true;
                 }
             }

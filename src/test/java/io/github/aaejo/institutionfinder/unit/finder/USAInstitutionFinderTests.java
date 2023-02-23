@@ -2,7 +2,15 @@ package io.github.aaejo.institutionfinder.unit.finder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +30,9 @@ public class USAInstitutionFinderTests {
 
     private final USAInstitutionFinder usaFinder = new USAInstitutionFinder(institutionsProducer, connection);
 
+    /**
+     * Successful case of fetching institution details.
+     */
     @Test
     void getInstitutionDetails_success_correctDetailsReturned() throws IOException {
         setupSchoolInfoMock();
@@ -38,6 +49,10 @@ public class USAInstitutionFinderTests {
         assertEquals(expected, actual);
     }
 
+    /**
+     * When there is a failure to load the institution's information page, even after
+     * retrying, the method returns null.
+     */
     @Test
     void getInstitutionDetails_failToGetPage_returnNull() throws IOException {
         setupSchoolInfoExceptionMock();
@@ -49,6 +64,9 @@ public class USAInstitutionFinderTests {
         assertNull(actual);
     }
 
+    /**
+     * When the institution's information page fails to load, it can recover by retrying.
+     */
     @Test
     void getInstitutionDetails_failToGetPageFirstTime_succeedsAfterRetry() throws IOException {
         when(connection
@@ -73,6 +91,12 @@ public class USAInstitutionFinderTests {
         assertEquals(expected, actual);
     }
 
+    /**
+     * A state/territory may not have any institutions that match the programs filter set.
+     * In this case, an empty page of results will load. This may also occur if an additional
+     * page of results that does not exist is attempted to be loaded. In either case, the
+     * empty page can be handled gracefully.
+     */
     @Test
     void produceStateInstitutions_noResults_sucessfulProcessing() throws IOException {
         setupSchoolInfoMock();
@@ -83,6 +107,9 @@ public class USAInstitutionFinderTests {
         verify(institutionsProducer, never()).send(any(Institution.class));
     }
 
+    /**
+     * Successful case for a single page of search results.
+     */
     @Test
     void produceStateInstitutions_singlePageResults_sucessfulProcessing() throws IOException {
         setupSchoolInfoMock();
@@ -93,6 +120,12 @@ public class USAInstitutionFinderTests {
         verify(institutionsProducer, times(9)).send(any(Institution.class));
     }
 
+    /**
+     * When a single page of search results fails to load for whatever reason (even after retrying) the
+     * next page will be "probed" even if it is unknown whether another page exists. If loading the next
+     * page succeeds, in the case that there was only one page of results, that page will be empty. This
+     * situation can be handled gracefully.
+     */
     @Test
     void produceInstitutions_singlePageResultsFailsAndNextPageLoads_handledGracefully() throws IOException {
         setupSchoolInfoMock();
@@ -120,6 +153,11 @@ public class USAInstitutionFinderTests {
         verify(institutionsProducer, never()).send(any(Institution.class));
     }
 
+    /**
+     * The same scenario as the previous test, however in this case the next page "probed" also does not load.
+     * In this situation, it's treated as any two pages failing consecutively, and processing is aborted
+     * for the state.
+     */
     @Test
     void produceInstitutions_singlePageResultsFailsAndNextPageFails_handledGracefully() throws IOException {
         setupSchoolInfoMock();
@@ -136,6 +174,10 @@ public class USAInstitutionFinderTests {
         verify(institutionsProducer, never()).send(any(Institution.class));
     }
 
+    /**
+     * In the processing of a page of results, if getting the details for one of the institutions
+     * somehow fails, the remaining will still be sent successfully.
+     */
     @Test
     void produceStateInstitutions_getInstitutionDetailsFailsOnce_remainingStillSent() throws IOException {
         setupSchoolInfoMock();
@@ -152,6 +194,9 @@ public class USAInstitutionFinderTests {
         verify(institutionsProducer, times(8)).send(any(Institution.class));
     }
 
+    /**
+     * Successful processing of multi-page results when no errors occur.
+     */
     @Test
     void produceStateInstitutions_multiPageResults_sucessfulProcessing() throws IOException {
         setupSchoolInfoMock();
@@ -163,7 +208,9 @@ public class USAInstitutionFinderTests {
     }
 
     /**
-     * successful continuation when page limit is unknown
+     * When a failure occurs in loading the first page of results, even after retry, the next page will be
+     * "probed" even if it is unknown that there is a second page. From there, the process continues
+     * without further issue.
      */
     @Test
     void produceStateInstitutions_firstMultiPageResultsFails_remainingStillSent() throws IOException {
@@ -184,7 +231,9 @@ public class USAInstitutionFinderTests {
     }
 
     /**
-     * successful continuation when page limit is known
+     * When a failure occurs in loading a page of results, even after retry, the processing will continue to the
+     * next page when it is known that there are additional pages to scrape. From there, the process continues
+     * without further issue.
      */
     @Test
     void produceStateInstitutions_secondMultiPageResultsFails_remainingStillSent() throws IOException {
@@ -205,7 +254,9 @@ public class USAInstitutionFinderTests {
     }
 
     /**
-     * gives up trying the rest when two consecutive pages fail
+     * When loading a page fails (after retrying), the next page is attempted. If the next page also fails,
+     * the system will back off and abort the current state to prevent overwhelming the server. This has no
+     * effect on the institutions collected before the failure.
      */
     @Test
     void produceStateInstitutions_thirdAndFourthMultiPageResultsFail_abortedRemaining() throws IOException {
@@ -232,7 +283,9 @@ public class USAInstitutionFinderTests {
     }
 
     /**
-     * fail to load final page, but doesn't probe next because it's known that there isn't one
+     * When a failure occurs in loading the final page of results, even after retry, the processing will not
+     * attempt to check the next page. Since the previous pages loaded successfully, it is known that no more
+     * pages exist, so there is nothing to check.
      */
     @Test
     void produceStateInstitutions_finalMultiPageResultsFails_restSentAndNoMoreChecked() throws IOException {
@@ -259,6 +312,10 @@ public class USAInstitutionFinderTests {
                 .get();
     }
 
+    /**
+     * If a results page fails to load the first time, but loads successfully after a retry, the processing
+     * can continue without any issues.
+     */
     @Test
     void produceStateInstitutions_fifthMultiPageResultFailsFirstTime_succeedsAfterRetry() throws IOException {
         setupSchoolInfoMock();
