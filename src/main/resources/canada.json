@@ -3,7 +3,7 @@
         "name": "Acadia University",
         "country": "Canada",
         "address": "15 University Ave, Wolfville, NS, B4P 2R6",
-        "website": "https://www2.acadiau.ca/"
+        "website": "https://philosophy.acadiau.ca/facstaff.html"
     },
     {
         "name": "Athabasca University",
@@ -15,13 +15,13 @@
         "name": "Bishop's University",
         "country": "Canada",
         "address": "2600 College St, Sherbrooke, QC, J1M 1Z7",
-        "website": "https://www.ubishops.ca/"
+        "website": "https://www.ubishops.ca/academic-programs/faculty-of-arts-and-science/humanities/philosophy/faculty-contact/"
     },
     {
         "name": "Brandon University",
         "country": "Canada",
         "address": "270 18th St, Brandon, MB, R7A 6A9",
-        "website": "https://www.brandonu.ca/"
+        "website": "https://www.brandonu.ca/philosophy/faculty/"
     },
     {
         "name": "Brescia University College",
@@ -33,7 +33,7 @@
         "name": "Brock University",
         "country": "Canada",
         "address": "1812 Sir Isaac Brock Way, St. Catharines, ON, L2S 3A1",
-        "website": "https://brocku.ca/"
+        "website": "https://brocku.ca/humanities/philosophy/faculty-and-staff/"
     },
     {
         "name": "Campion College",
@@ -45,25 +45,25 @@
         "name": "Canadian Mennonite University",
         "country": "Canada",
         "address": "500 Shaftesbury Blvd, Winnipeg, MB, R3P 2N2",
-        "website": "https://www.cmu.ca/"
+        "website": "https://www.cmu.ca/academics/philosophy/faculty"
     },
     {
         "name": "Cape Breton University",
         "country": "Canada",
         "address": "1250 Grand Lake Rd, Sydney, NS, B1P 6L2",
-        "website": "https://www.cbu.ca/"
+        "website": "https://www.cbu.ca/faculty-staff/departments/philosophy/"
     },
     {
         "name": "Carleton University",
         "country": "Canada",
         "address": "1125 Colonel By Dr, Ottawa, ON, K1S 5B6",
-        "website": "https://carleton.ca/"
+        "website": "https://carleton.ca/philosophy/faculty/"
     },
     {
         "name": "Concordia University",
         "country": "Canada",
         "address": "1455 de Maisonneuve Blvd W, Montreal, QC, H3G 1M8",
-        "website": "https://www.concordia.ca/"
+        "website": "https://www.concordia.ca/artsci/philosophy/about/faculty.html"
     },
     {
         "name": "Concordia University of Edmonton",
@@ -75,7 +75,7 @@
         "name": "Dalhousie University",
         "country": "Canada",
         "address": "6299 South St, Halifax, NS, B3H 4R2",
-        "website": "https://www.dal.ca/"
+        "website": "https://www.dal.ca/faculty/arts/philosophy/FacultyandStaff/our-faculty.html"
     },
     {
         "name": "Huron University College",
@@ -99,7 +99,13 @@
         "name": "Lakehead University",
         "country": "Canada",
         "address": "955 Oliver Rd, Thunder Bay, ON, P7B 5E1",
-        "website": "https://www.lakeheadu.ca/"
+        "website": "https://www.lakeheadu.ca/programs/departments/philosophy/people"
+    },
+    {
+        "name": "Laurentian University",
+        "country": "Canada",
+        "address": "935 Ramsey Lake Rd, Sudbury, ON, P3E 2C6",
+        "website": "https://laurentian.ca/stub-13"
     },
     {
         "name": "Luther College",
@@ -111,7 +117,7 @@
         "name": "MacEwan University",
         "country": "Canada",
         "address": "10700 104 Ave NW, Edmonton, AB, T5J 4S2",
-        "website": "https://www.macewan.ca/"
+        "website": "https://www.macewan.ca/academics/academic-departments/humanities/our-people/"
     },
     {
         "name": "McGill University",
@@ -123,25 +129,25 @@
         "name": "McMaster University",
         "country": "Canada",
         "address": "1280 Main St W, Hamilton, ON, L8S 4L8",
-        "website": "https://www.mcmaster.ca/"
+        "website": "https://www.humanities.mcmaster.ca/contact-us/directory/?deptId=32388&category=Permanent%20Faculty"
     },
     {
         "name": "Memorial University of Newfoundland",
         "country": "Canada",
         "address": "230 Elizabeth Ave, St. John's, NL, A1C 5S7",
-        "website": "https://www.mun.ca/"
+        "website": "https://www.mun.ca/philosophy/people/"
     },
     {
         "name": "Mount Allison University",
         "country": "Canada",
         "address": "62 York St, Sackville, NB, E4L 1E2",
-        "website": "https://www.mta.ca/"
+        "website": "https://mta.ca/current-students/department-philosophy/philosophy-faculty-and-staff"
     },
     {
         "name": "Nipissing University",
         "country": "Canada",
         "address": "100 College Dr, North Bay, ON, P1B 8L7",
-        "website": "https://www.nipissingu.ca/"
+        "website": "https://www.nipissingu.ca/users?field_department_1_1=391&field_position=All&search_api_fulltext="
     },
     {
         "name": "Queen's University",
@@ -159,13 +165,13 @@
         "name": "Saint Mary's University",
         "country": "Canada",
         "address": "923 Robie St, Halifax, NS, B3H 3C3",
-        "website": "https://www.smu.ca/"
+        "website": "http://boe.smu.ca/philosophy/faculty-and-staff.html"
     },
     {
         "name": "Simon Fraser University",
         "country": "Canada",
         "address": "8888 University Dr, Burnaby, BC, V5A 1S6",
-        "website": "https://www.sfu.ca/"
+        "website": "https://www.sfu.ca/philosophy/people/faculty/research_teaching.html"
     },
     {
         "name": "St. Francis Xavier University",
@@ -180,12 +186,6 @@
         "website": "https://www.sju.ca/"
     },
     {
-        "name": "St. Mary's University",
-        "country": "Canada",
-        "address": "923 Robie St, Halifax, NS, B3H 3C3",
-        "website": "https://www.smu.ca/"
-    },
-    {
         "name": "St. Thomas More College",
         "country": "Canada",
         "address": "1437 College Dr, Saskatoon, SK, S7N 0W6",
@@ -195,7 +195,7 @@
         "name": "St. Thomas University",
         "country": "Canada",
         "address": "51 Dineen Dr, Fredericton, NB, E3B 5G3",
-        "website": "https://www.stu.ca/"
+        "website": "https://www.stu.ca/philosophy/faculty/"
     },
     {
         "name": "The King's University",
@@ -207,7 +207,7 @@
         "name": "Thompson Rivers University",
         "country": "Canada",
         "address": "805 TRU Way, Kamloops, BC, V2C 0C8",
-        "website": "https://www.tru.ca/"
+        "website": "https://www.tru.ca/arts/departments/php/faculty.html"
     },
     {
         "name": "Toronto Metropolitan University",
@@ -219,7 +219,7 @@
         "name": "Trent University",
         "country": "Canada",
         "address": "1600 West Bank Dr, Peterborough, ON, K9L 0G2",
-        "website": "https://www.trentu.ca/"
+        "website": "https://www.trentu.ca/philosophy/faculty-research"
     },
     {
         "name": "Trinity Western University",
@@ -237,7 +237,7 @@
         "name": "University of British Columbia",
         "country": "Canada",
         "address": "2329 West Mall, Vancouver, BC, V6T 1Z4",
-        "website": "https://www.ubc.ca/"
+        "website": "https://philosophy.ubc.ca/people/"
     },
     {
         "name": "University of Calgary",
@@ -249,7 +249,7 @@
         "name": "University of Guelph",
         "country": "Canada",
         "address": "50 Stone Rd E, Guelph, ON, N1G 2W1",
-        "website": "https://www.uoguelph.ca/"
+        "website": "https://www.uoguelph.ca/arts/philosophy/people"
     },
     {
         "name": "University of King's College",
@@ -261,7 +261,7 @@
         "name": "University of Lethbridge",
         "country": "Canada",
         "address": "4401 University Dr W, Lethbridge, AB, T1K 3M4",
-        "website": "https://www.uleth.ca/"
+        "website": "https://www.ulethbridge.ca/artsci/philosophy/meet-our-faculty-staff"
     },
     {
         "name": "University of Manitoba",
@@ -279,7 +279,7 @@
         "name": "University of Ottawa",
         "country": "Canada",
         "address": "75 Laurier Ave E, Ottawa, ON, K1N 6N5",
-        "website": "https://www.uottawa.ca/"
+        "website": "https://www.uottawa.ca/faculty-arts/philosophy"
     },
     {
         "name": "University of Prince Edward Island",
@@ -291,7 +291,7 @@
         "name": "University of Regina",
         "country": "Canada",
         "address": "3737 Wascana Pkwy, Regina, SK, S4S 0A2",
-        "website": "https://www.uregina.ca/"
+        "website": "https://www.uregina.ca/arts/philosophy-classics/faculty-staff/index.html"
     },
     {
         "name": "University of Saskatchewan",
@@ -321,7 +321,7 @@
         "name": "University of Windsor",
         "country": "Canada",
         "address": "401 Sunset Ave, Windsor, ON, N9B 3P4",
-        "website": "https://www.uwindsor.ca/"
+        "website": "https://www.uwindsor.ca/philosophy/310/faculty-and-staff"
     },
     {
         "name": "University of Winnipeg",
@@ -345,18 +345,18 @@
         "name": "Western University",
         "country": "Canada",
         "address": "1151 Richmond St, London, ON, N6A 3K7",
-        "website": "https://www.uwo.ca/"
+        "website": "https://www.uwo.ca/philosophy/people/fulltime.html"
     },
     {
         "name": "Wilfrid Laurier University",
         "country": "Canada",
         "address": "75 University Ave W, Waterloo, ON, N2L 3C5",
-        "website": "https://www.wlu.ca/"
+        "website": "https://students.wlu.ca/programs/arts/philosophy/faculty-and-staff.html"
     },
     {
         "name": "York University",
         "country": "Canada",
         "address": "4700 Keele St, Toronto, ON, M3J 1P3",
-        "website": "https://www.yorku.ca/"
+        "website": "https://profiles.laps.yorku.ca/faculty-fulltime-listing/?facultyarea=department-of-philosophy"
     }
 ]
