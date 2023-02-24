@@ -1,4 +1,4 @@
-package io.github.aaejo.institutionfinder.unit.finder;
+package io.github.aaejo.institutionfinder.finder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;

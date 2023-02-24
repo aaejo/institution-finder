@@ -1,4 +1,4 @@
-package io.github.aaejo.institutionfinder.unit.finder;
+package io.github.aaejo.institutionfinder.finder;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.mock;
