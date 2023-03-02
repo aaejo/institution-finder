@@ -19,7 +19,6 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.junit.jupiter.api.Test;
 
-import io.github.aaejo.institutionfinder.finder.USAInstitutionFinder;
 import io.github.aaejo.institutionfinder.messaging.producer.InstitutionsProducer;
 import io.github.aaejo.messaging.records.Institution;
 
