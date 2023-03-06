@@ -1,0 +1,44 @@
+[
+    {
+        "name": "University of Otago",
+        "country": "New Zealand",
+        "address": "362 Leith Street, Dunedin North, Dunedin, 9016",
+        "website": "https://www.otago.ac.nz/philosophy/"
+    },
+    {
+        "name": "University of Canterbury",
+        "country": "New Zealand",
+        "address": "20 Kirkwood Avenue, Upper Riccarton, Christchurch, 8041",
+        "website": "https://www.canterbury.ac.nz/study/subjects/philosophy/"
+    },
+    {
+        "name": "Victoria University of Wellington",
+        "country": "New Zealand",
+        "address": "Kelburn, Wellington 6012",
+        "website": "https://www.wgtn.ac.nz/search?q=philosophy&tab=people"
+    },
+    {
+        "name": "Massey University",
+        "country": "New Zealand",
+        "address": "Massey University, Private Bag 11 222, Palmerston North, 4442",
+        "website": "https://www.massey.ac.nz/study/all-qualifications-and-degrees/bachelor-of-arts-UBART/philosophy-UBART2JPHLS1/"
+    },
+    {
+        "name": "University of Waikato",
+        "country": "New Zealand",
+        "address": "Hillcrest, Hamilton, 3216",
+        "website": "https://www.waikato.ac.nz/study/subjects/philosophy"
+    },
+    {
+        "name": "Auckland University of Technology",
+        "country": "New Zealand",
+        "address": "55 Wellesley Street East, Auckland CBD, Auckland, 1010",
+        "website": "https://www.aut.ac.nz/courses/master-of-philosophy"
+    },
+    {
+        "name": "University of Auckland",
+        "country": "New Zealand",
+        "address": "Auckland CBD, Auckland, 1010",
+        "website": "https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/philosophy.html"
+    }
+] 
