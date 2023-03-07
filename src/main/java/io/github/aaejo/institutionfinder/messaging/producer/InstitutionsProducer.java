@@ -25,10 +25,10 @@ public class InstitutionsProducer {
         CompletableFuture<SendResult<String, Institution>> sendResultFuture = this.template.send(TOPIC, institution);
         sendResultFuture.whenComplete((result, ex) -> {
             if (ex == null) {
-                log.debug("Sent: " + institution.toString());
+                log.debug("Sent: {}", institution.toString());
             }
             else {
-                log.error("Failed to send: " + institution.toString(), ex);
+                log.error("Failed to send: {}", institution.toString(), ex);
             }
         });
     }
