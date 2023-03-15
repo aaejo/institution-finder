@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.retry.backoff.FixedBackOffPolicy;
+import org.springframework.retry.policy.SimpleRetryPolicy;
+import org.springframework.retry.support.RetryTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -40,10 +43,14 @@ public class InstitutionFinderConfiguration {
             }
 
             // All configuration for the Jsoup client for the USA Finder can be done here before injection.
-            Connection connection = Jsoup
-                    .connect(properties.registryURL().toString());
+            Connection connection = Jsoup.connect(properties.registryURL().toString());
 
-            return new USAInstitutionFinder(institutionsProducer, connection);
+            RetryTemplate retryTemplate = RetryTemplate.builder()
+                                            .maxAttempts(2) // Initial + 1 retry
+                                            .fixedBackoff(2000L)
+                                            .build();
+
+            return new USAInstitutionFinder(institutionsProducer, connection, retryTemplate);
         } else {
             return new JsonInstitutionFinder(properties.country().name(), institutionsProducer, objectMapper);
         }

@@ -1,12 +1,15 @@
 package io.github.aaejo.institutionfinder.finder;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Arrays;
 
+import org.apache.hc.core5.net.URIBuilder;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.retry.support.RetryTemplate;
 
 import io.github.aaejo.institutionfinder.messaging.producer.InstitutionsProducer;
 import io.github.aaejo.messaging.records.Institution;
@@ -20,11 +23,12 @@ public class USAInstitutionFinder implements InstitutionFinder {
 
     private final InstitutionsProducer institutionsProducer;
     private final Connection registryConnection;
+    private final RetryTemplate retryTemplate;
 
-    public static final String[] STATES = { "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID",
-            "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-            "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV",
-            "WI", "WY", "AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI" };
+    public static final String[] STATES = { "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI",
+            "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH",
+            "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA",
+            "WV", "WI", "WY", "AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI" };
 
     public static final String PROGRAMS = "38.0104+" +  // Applied and Professional Ethics
                                           "38.0103+" +  // Ethics
@@ -32,13 +36,16 @@ public class USAInstitutionFinder implements InstitutionFinder {
                                           "38.0101+" +  // Philosophy
                                           "38.0199";    // Philosophy, Other
 
-    public USAInstitutionFinder(InstitutionsProducer institutionsProducer, Connection registryConnection) {
+    public USAInstitutionFinder(InstitutionsProducer institutionsProducer, Connection registryConnection,
+            RetryTemplate retryTemplate) {
         this.institutionsProducer = institutionsProducer;
         this.registryConnection = registryConnection;
+        this.retryTemplate = retryTemplate;
     }
 
     /**
-     * Produce institutions from College Navigator, using the program codes specified in {@code USAInstitutionFinder.PROGRAMS}.
+     * Produce institutions from College Navigator, using the program codes
+     * specified in {@code USAInstitutionFinder.PROGRAMS}.
      */
     @Override
     public void produceInstitutions() {
@@ -54,10 +61,12 @@ public class USAInstitutionFinder implements InstitutionFinder {
     /**
      * Produce institutions for a single US state or territory.
      *
-     * Results are loaded from College Navigator. If a page of results fails to load, it will be retried once.
-     * If the retry also fails, the next page will be tried unless it is known that no next page exists.
-     * If two consecutive pages fail, the process will end for the state. Any previous institutions will still
-     * have been produced.
+     * Results are loaded from College Navigator. If a page of results fails to
+     * load, it will be retried according to the instance's RetryTemplate.
+     * If the retries also fail, the next page will be tried unless it is known that
+     * no next page exists.
+     * If two consecutive pages fail, the process will end for the state. Any
+     * previous institutions will still have been produced.
      *
      * @param state the state (or territory) to find institutions for.
      */
@@ -69,15 +78,15 @@ public class USAInstitutionFinder implements InstitutionFinder {
         boolean hasNextPage = false;
 
         do {
-            // 1. Attempt to get results page (with single retry).
+            // 1. Attempt to get results page
             Document resultsPage = getResultsPage(state, pageNum);
 
             if (resultsPage == null // 2. If getting the results page failed, and
                 && ((pageLimit != 0 && pageNum < pageLimit) // 2.1. either the current page is within the known page limit
-                    || (pageLimit == 0))) { // 2.2 or the page limit is unknown (eg when the first page failed to load).
+                    || (pageLimit == 0))) { // 2.2 or the page limit is unknown (eg when the first page failed to load)
                 log.warn("Failed to load page {} of results, attempting next page.", pageNum);
 
-                // 2.3. Then move onto the next page and attempt to get that instead (with single retry).
+                // 2.3. Then move onto the next page and attempt to get that instead 
                 pageNum++;
                 resultsPage = getResultsPage(state, pageNum);
             }
@@ -90,7 +99,8 @@ public class USAInstitutionFinder implements InstitutionFinder {
 
             Element resultsTableBody = resultsPage
                     .getElementById("ctl00_cphCollegeNavBody_ucResultsMain_tblResults").firstElementChild();
-            Element pagingControls = resultsPage.getElementById("ctl00_cphCollegeNavBody_ucResultsMain_divPagingControls");
+            Element pagingControls = resultsPage
+                    .getElementById("ctl00_cphCollegeNavBody_ucResultsMain_divPagingControls");
 
             if (resultsTableBody == null) {
                 log.info("No results on page");
@@ -107,7 +117,8 @@ public class USAInstitutionFinder implements InstitutionFinder {
                     try {
                         pageLimit = Integer.parseInt(finalToken);
                     } catch (NumberFormatException e) {
-                        log.debug("Failed to determine page limit from paging controls. Checked token = {}", finalToken);
+                        log.debug("Failed to determine page limit from paging controls. Checked token = {}",
+                                finalToken);
                     }
                 }
             }
@@ -131,9 +142,10 @@ public class USAInstitutionFinder implements InstitutionFinder {
                                         .getElementsByAttribute("href")
                                         .first();
                 String schoolName = schoolInfoLink.text();
-                String schoolId = Arrays.stream(schoolInfoLink.attr("href").split("&"))
-                        .filter(p -> p.startsWith("id") || p.startsWith("?id"))
-                        .findFirst().get().split("=")[1];
+                String schoolId = new URIBuilder(URI.create(schoolInfoLink.attr("abs:href")))
+                        .getQueryParams().stream()
+                        .filter(p -> p.getName().equals("id"))
+                        .findFirst().get().getValue();
 
                 log.debug("{} id = {}", schoolName, schoolId);
 
@@ -146,42 +158,36 @@ public class USAInstitutionFinder implements InstitutionFinder {
     }
 
     /**
-     * Get information on an institution by querying College Navigator for a school ID.
-     * Will retry once if the connection fails.
+     * Get information on an institution by querying College Navigator for a school
+     * ID. Will use the instance's RetryTemplate for retrying the request if it
+     * fails.
      *
      * @param schoolName    name of the institution being queried for
      * @param schoolId      College Navigator ID for the institution being queried for
      * @return              a complete Institution record, or null if unable to load the page
      */
     public Institution getInstitutionDetails(String schoolName, String schoolId) {
-        Document infoPage = null;
-        boolean retry = false;
-
-        do {
-            try {
-                infoPage = registryConnection
-                            .newRequest()
-                            .data("id", schoolId)
-                            .get();
-
-                if (retry) {
-                    retry = false; // Stop retrying when succeeded after retry
-                }
-            } catch (IOException e) {
-                if (retry) {
-                    log.error("Failed to get details page for {} on retry", schoolName, e);
+        Document infoPage = retryTemplate.execute(
+                // Retryable part
+                ctx -> {
+                    try {
+                        return registryConnection
+                                .newRequest()
+                                .data("id", schoolId)
+                                .get();
+                    } catch (IOException e) {
+                        log.error("Failed to fetch details page for {}. May retry.", schoolName, e);
+                        // Rethrowing as RuntimeException for retry handling
+                        throw new RuntimeException(e);
+                    }
+                },
+                // Recovery part
+                ctx -> {
+                    log.info("Max retries exceeded for fetching details page for {}", schoolName);
+                    // If we exceed max retries, return null
                     return null;
-                } else {
-                    log.warn("Failed to get details page for {}, will retry", schoolName, e);
-                    retry = true;
-                }
-            }
-        } while (retry);
+                });
 
-        /*
-         * This should never happen but if somehow we've reached here with a null infoPage even
-         * after the retry and early return, just return null for safety.
-         */
         if (infoPage == null) {
             return null;
         }
@@ -193,38 +199,36 @@ public class USAInstitutionFinder implements InstitutionFinder {
     }
 
     /**
-     * Get a College Naviagtor search results page for a certain state. Will retry once.
+     * Get a College Naviagtor search results page for a certain state. Will use the
+     * instance's RetryTemplate for retrying the request if it fails.
      *
      * @param state 2-letter state abbreviation
      * @param page  page number of results to fetch
      * @return      page contents as a Jsoup Document, or null
      */
     private Document getResultsPage(String state, int page) {
-        Document resultsPage = null;
-        boolean retry = false;
-
-        do {
-            try {
-                resultsPage = registryConnection
-                        .newRequest()
-                        .data("p", PROGRAMS)
-                        .data("s", state)
-                        .data("pg", Integer.toString(page))
-                        .get();
-
-                if (retry) {
-                    retry = false; // Stop retrying when succeeded after retry
-                }
-            } catch (IOException e) {
-                if (retry) {
-                    log.error("Failed to connect to College Navigator with state = {} on retry", state, e);
-                    retry = false;
-                } else {
-                    log.warn("Failed to connect to College Navigator with state = {}, will retry", state, e);
-                    retry = true;
-                }
-            }
-        } while (retry);
+        Document resultsPage = retryTemplate.execute(
+                // Retryable part
+                ctx -> {
+                    try {
+                        return registryConnection
+                                .newRequest()
+                                .data("p", PROGRAMS)
+                                .data("s", state)
+                                .data("pg", Integer.toString(page))
+                                .get();
+                    } catch (IOException e) {
+                        log.error("Failed to connect to College Navigator with state = {}. May retry.", state, e);
+                        // Rethrowing as RuntimeException for retry handling
+                        throw new RuntimeException(e);
+                    }
+                },
+                // Recovery part
+                ctx -> {
+                    log.info("Max retries exceeded for connecting to College Navigator with state = {}", state);
+                    // If we exceed max retries, return null
+                    return null;
+                });
 
         return resultsPage;
     }
