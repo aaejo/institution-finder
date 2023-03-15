@@ -46,7 +46,7 @@ public class USAInstitutionFinderTests {
                 "University of California-Berkeley",
                 "USA",
                 "200 California Hall, Berkeley, California 94720",
-                "www.berkeley.edu/");
+                "https://www.berkeley.edu/");
 
         Institution actual = usaFinder.getInstitutionDetails(schoolName, schoolId);
 
@@ -88,7 +88,7 @@ public class USAInstitutionFinderTests {
                 "University of California-Berkeley",
                 "USA",
                 "200 California Hall, Berkeley, California 94720",
-                "www.berkeley.edu/");
+                "https://www.berkeley.edu/");
 
         Institution actual = usaFinder.getInstitutionDetails(schoolName, schoolId);
 

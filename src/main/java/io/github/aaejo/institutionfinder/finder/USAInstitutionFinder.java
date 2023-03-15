@@ -2,7 +2,6 @@ package io.github.aaejo.institutionfinder.finder;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
 
 import org.apache.hc.core5.net.URIBuilder;
 import org.jsoup.Connection;
@@ -193,7 +192,7 @@ public class USAInstitutionFinder implements InstitutionFinder {
         }
 
         String address = infoPage.selectFirst(".headerlg").parent().textNodes().get(0).text();
-        String website = infoPage.selectFirst(":containsOwn(Website:)").siblingElements().first().text();
+        String website = "https://" + infoPage.selectFirst(":containsOwn(Website:)").siblingElements().first().text();
 
         return new Institution(schoolName, "USA", address, website);
     }
