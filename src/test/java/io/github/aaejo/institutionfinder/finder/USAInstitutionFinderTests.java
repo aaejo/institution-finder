@@ -18,6 +18,7 @@ import java.io.IOException;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.junit.jupiter.api.Test;
+import org.springframework.retry.support.RetryTemplate;
 
 import io.github.aaejo.institutionfinder.messaging.producer.InstitutionsProducer;
 import io.github.aaejo.messaging.records.Institution;
@@ -26,8 +27,12 @@ public class USAInstitutionFinderTests {
 
     private final InstitutionsProducer institutionsProducer = mock(InstitutionsProducer.class);
     private final Connection connection = mock(Connection.class, RETURNS_DEEP_STUBS);
+    private final RetryTemplate retryTemplate = RetryTemplate.builder()
+                                                .maxAttempts(2)
+                                                .fixedBackoff(1L) // Minimal delay in tests
+                                                .build();
 
-    private final USAInstitutionFinder usaFinder = new USAInstitutionFinder(institutionsProducer, connection);
+    private final USAInstitutionFinder usaFinder = new USAInstitutionFinder(institutionsProducer, connection, retryTemplate);
 
     /**
      * Successful case of fetching institution details.
