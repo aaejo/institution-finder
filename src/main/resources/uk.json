@@ -1,0 +1,296 @@
+[
+    {
+        "name": "University of Oxford",
+        "country": "United Kingdom",
+        "address": "Radcliffe Humanities, Woodstock Road, Oxford, OX2 6GG",
+        "website": "https://www.philosophy.ox.ac.uk/faculty-members?filter-421-membership%20type-2428736=2571"
+    },
+    {
+        "name": "University of St Andrews",
+        "country": "United Kingdom",
+        "address": "211 Church St, Parramatta, NSW 2150",
+        "website": "https://www.st-andrews.ac.uk/philosophy/people/"
+    },
+    {
+        "name": "University of Cambridge",
+        "country": "United Kingdom",
+        "address": "The Old Schools, Trinity Ln, Cambridge, CB2 1TN",
+        "website": "https://www.phil.cam.ac.uk/people/teaching-research"
+    },
+    {
+        "name": "London School of Economics and Political Science",
+        "country": "United Kingdom",
+        "address": "Houghton St, London, WC2A 2AE",
+        "website": "https://www.lse.ac.uk/philosophy/people/"
+    },
+    {
+        "name": "University of Warwick",
+        "country": "United Kingdom",
+        "address": "Coventry, CV4 7AL",
+        "website": "https://warwick.ac.uk/fac/soc/philosophy/people/"
+    },
+    {
+        "name": "University College London",
+        "country": "United Kingdom",
+        "address": "Senate House, Malet St, London, WC1E 7HU",
+        "website": "https://www.ucl.ac.uk/philosophy/people-0"
+    },
+    {
+        "name": "University of Bristol",
+        "country": "United Kingdom",
+        "address": "Beacon House, Queens Rd, Bristol, BS8 1QU",
+        "website": "http://www.bristol.ac.uk/philosophy/research/foundational-studies/people/"
+    },
+    {
+        "name": "King's College London",
+        "country": "United Kingdom",
+        "address": "Strand, London, WC2R 2LS",
+        "website": "https://www.kcl.ac.uk/philosophy/about/people?role=Academics"
+    },
+    {
+        "name": "Durham University",
+        "country": "United Kingdom",
+        "address": "50 Old Elvet, Durham, DH1 3HN",
+        "website": "https://www.durham.ac.uk/departments/academic/philosophy/about-us/people/"
+    },
+    {
+        "name": "University of Dundee",
+        "country": "United Kingdom",
+        "address": "Nethergate, Dundee, DD1 4HN",
+        "website": "https://www.dundee.ac.uk/humanities/people"
+    },
+    {
+        "name": "University of Southampton",
+        "country": "United Kingdom",
+        "address": "University Rd, Southampton, SO17 1BJ",
+        "website": "https://www.southampton.ac.uk/philosophy/research/staff.page"
+    },
+    {
+        "name": "Anglia Ruskin University",
+        "country": "United Kingdom",
+        "address": "Anglia Ruskin University, East Rd, Cambridge, CB1 1PT",
+        "website": "https://aru.ac.uk/arts-humanities-and-social-sciences/faculty-staff"
+    },
+    {
+        "name": "Birmingham University",
+        "country": "United Kingdom",
+        "address": "Edgbaston, Birmingham, B15 2TT",
+        "website": "https://www.birmingham.ac.uk/schools/education/research/philosophy/people/index.aspx"
+    },
+    {
+        "name": " University of Exeter",
+        "country": "United Kingdom",
+        "address": "Stocker Rd, Exeter, EX4 4PY",
+        "website": "https://sociology.exeter.ac.uk/staff/"
+    },
+    {
+        "name": "The University of Edinburgh",
+        "country": "United Kingdom",
+        "address": "Old College, South Bridge, Edinburgh, EH8 9YL",
+        "website": "https://www.ed.ac.uk/ppls/philosophy/people/academic-staff"
+    },
+    {
+        "name": "Nottingham Trent University",
+        "country": "United Kingdom",
+        "address": "50 Shakespeare St, Nottingham, NG1 4FQ",
+        "website": "https://www.ntu.ac.uk/about-us/staff-directory?query=philosophy"
+    },
+    {
+        "name": "Oxford Brookes University",
+        "country": "United Kingdom",
+        "address": "Headington Rd, Headington, Oxford, OX3 0BP",
+        "website": "https://www.brookes.ac.uk/hpc/Staff"
+    },
+    {
+        "name": "Bangor University",
+        "country": "United Kingdom",
+        "address": "Bangor, LL57 2DG",
+        "website": "https://www.bangor.ac.uk/staff/history-law-social-sciences/en#academic"
+    },
+    {
+        "name": "The University of Edinburgh",
+        "country": "United Kingdom",
+        "address": "Old College, South Bridge, Edinburgh, EH8 9YL",
+        "website": "https://www.ed.ac.uk/ppls/philosophy/people/academic-staff"
+    },
+    {
+        "name": "University of Winchester",
+        "country": "United Kingdom",
+        "address": "Sparkford Rd, Winchester, SO22 4NR",
+        "website": "https://www.winchester.ac.uk/about-us/leadership-and-governance/our-faculties/hss/theologyreligionphilosophy/"
+    },
+    {
+        "name": "SOAS University of London",
+        "country": "United Kingdom",
+        "address": "10 Thornhaugh St, London, WC1H 0XG",
+        "website": "https://www.soas.ac.uk/about/schools-departments-and-sections/school-history-religions-and-philosophies/department-0"
+    },
+    {
+        "name": "The University of Manchester",
+        "country": "United Kingdom",
+        "address": "Oxford Rd, Manchester, M13 9PL",
+        "website": "https://www.socialsciences.manchester.ac.uk/about/people/staff-directory/philosophy-staff/"
+    },
+    {
+        "name": "University of Leeds",
+        "country": "United Kingdom",
+        "address": "Woodhouse, Leeds LS2 9JT",
+        "website": "https://ahc.leeds.ac.uk/stafflist?searchFilter=allfields&query=&staffTypes%5B%5D=all&staffTypes%5B%5D=academic&staffTypes%5B%5D=professional&staffTypes%5B%5D=visiting&staffTypes%5B%5D=honorary&categoryIDs%5B%5D=97"
+    },
+    {
+        "name": "University of York",
+        "country": "United Kingdom",
+        "address": "Heslington, York YO10 5DD",
+        "website": "https://www.york.ac.uk/philosophy/staff/"
+    },
+    {
+        "name": "University of Aberdeen",
+        "country": "United Kingdom",
+        "address": "King's College, Aberdeen AB24 3FX",
+        "website": "https://www.abdn.ac.uk/sdhp/people/index.php"
+    },
+    {
+        "name": "The University of Sheffield",
+        "country": "United Kingdom",
+        "address": "Sheffield, S10 2TN",
+        "website": "https://www.sheffield.ac.uk/philosophy/people/academic-staff"
+    },
+    {
+        "name": "Keele University",
+        "country": "United Kingdom",
+        "address": "Keele, Newcastle ST5 5BG",
+        "website": "https://www.keele.ac.uk/spgs/staff/"
+    },
+    {
+        "name": "University of East Anglia",
+        "country": "United Kingdom",
+        "address": "Norwich Research Park, Norwich NR4 7TJ",
+        "website": "https://research-portal.uea.ac.uk/en/organisations/philosophy/persons/"
+    },
+    {
+        "name": "Lancaster University",
+        "country": "United Kingdom",
+        "address": "Bailrigg, Lancaster LA1 4YW",
+        "website": "https://www.research.lancs.ac.uk/portal/en/organisations/politics-philosophy-and-religion(70048a7e-d2a1-4114-ba7d-14b9592a123d)/people.html?filter=all"
+    },
+    {
+        "name": "University of Roehampton London",
+        "country": "United Kingdom",
+        "address": "Roehampton Ln, London SW15 5PH",
+        "website": "https://www.roehampton.ac.uk/research-centres/centre-for-practical-philosophy-theology-and-religion/staff/"
+    },
+    {
+        "name": "University of Liverpool",
+        "country": "United Kingdom",
+        "address": "Liverpool, L69 3BX",
+        "website": "https://www.liverpool.ac.uk/philosophy/staff/"
+    },
+    {
+        "name": "University of Nottingham",
+        "country": "United Kingdom",
+        "address": "University Park, Nottingham NG7 2RD",
+        "website": "https://www.nottingham.ac.uk/humanities/departments/philosophy/people/"
+    },
+    {
+        "name": "Manchester Metropolitan University",
+        "country": "United Kingdom",
+        "address": "All Saints, All Saints Building, Manchester M15 6BH",
+        "website": "https://www.mmu.ac.uk/hpp/staff"
+    },
+    {
+        "name": "University of Brighton",
+        "country": "United Kingdom",
+        "address": "Mithras House, Lewes Road, Brighton BN2 4AT",
+        "website": "https://www.brighton.ac.uk/cappe/who-we-are/who-we-are.aspx"
+    },
+    {
+        "name": "University of Sussex",
+        "country": "United Kingdom",
+        "address": "Falmer, Brighton BN1 9RH",
+        "website": "https://www.sussex.ac.uk/schools/media-arts-humanities/internal/contacts/philosophy/group/academic-faculty"
+    },
+    {
+        "name": "University of Glasgow",
+        "country": "United Kingdom",
+        "address": "Glasgow, G12 8QQ",
+        "website": "https://www.gla.ac.uk/subjects/philosophy/staff/"
+    },
+    {
+        "name": "Royal Holloway, University of London",
+        "country": "United Kingdom",
+        "address": "Egham Hill, Egham TW20 0EX",
+        "website": "https://www.royalholloway.ac.uk/research-and-teaching/departments-and-schools/philosophy/philosophy-staff/"
+    },
+    {
+        "name": "University of Reading",
+        "country": "United Kingdom",
+        "address": "Reading, RG6 7BE",
+        "website": "https://www.reading.ac.uk/philosophy/our-staff"
+    },
+    {
+        "name": "Newcastle University",
+        "country": "United Kingdom",
+        "address": "Newcastle upon Tyne, NE1 7RU",
+        "website": "https://www.ncl.ac.uk/school-x/staff/philosophy/"
+    },
+    {
+        "name": "University of Stirling",
+        "country": "United Kingdom",
+        "address": "Stirling, FK9 4LA",
+        "website": "https://www.stir.ac.uk/about/faculties/arts-humanities/staff-search/law-and-philosophy-staff/"
+    },
+    {
+        "name": "University of Kent",
+        "country": "United Kingdom",
+        "address": "Giles Ln, Canterbury CT2 7NZ",
+        "website": "https://www.kent.ac.uk/philosophy/people"
+    },
+    {
+        "name": "University of Hertfordshire",
+        "country": "United Kingdom",
+        "address": "Hatfield, Hertfordshire, AL10 9AB",
+        "website": "https://researchprofiles.herts.ac.uk/en/organisations/philosophy/persons/"
+    },
+    {
+        "name": "University of Essex",
+        "country": "United Kingdom",
+        "address": "Wivenhoe Park, Colchester, CO4 3SQ",
+        "website": "https://www.essex.ac.uk/departments/philosophy-and-art-history/people/academic"
+    },
+    {
+        "name": "Queen's University Belfast",
+        "country": "United Kingdom",
+        "address": "University Rd, Belfast, BT7 1NN",
+        "website": "https://www.qub.ac.uk/schools/happ/subject-area/philosophy/people/"
+    },
+    {
+        "name": "University of Hull",
+        "country": "United Kingdom",
+        "address": "Cottingham Rd, Hull, HU6 7RX",
+        "website": "https://www.hull.ac.uk/search/staff?q=&uni=university+of+hull&subject=philosophy"
+    },
+    {
+        "name": "Cardiff University",
+        "country": "United Kingdom",
+        "address": "Cardiff, CF10 3AT",
+        "website": "https://www.cardiff.ac.uk/english-communication-philosophy/people/academic-staff/philosophy"
+    },
+    {
+        "name": "University of Chichester",
+        "country": "United Kingdom",
+        "address": "College Ln, Chichester, PO19 6PE",
+        "website": "https://www.chi.ac.uk/people/?_sft_team=philosophy-religion-and-ethics"
+    },
+    {
+        "name": "University of Gloucestershire",
+        "country": "United Kingdom",
+        "address": "The Park, Cheltenham, GL50 2RH",
+        "website": "https://uniofglos.blog/rpe/staff/"
+    },
+    {
+        "name": "Lincoln College",
+        "country": "United Kingdom",
+        "address": "Monks Rd, Lincoln LN2 5HQ",
+        "website": "https://www.lincoln.ac.uk/hh/schoolstaff/philosophystaff/"
+    }
+]
