@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.scheduling.annotation.Async;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -33,6 +34,7 @@ public class JsonInstitutionFinder implements InstitutionFinder {
      * Produce institutions from a JSON file in the classpath, associated with this
      * institution finder instance's country.
      */
+    @Async
     @Override
     public void produceInstitutions() {
         String fileName = country + ".json";

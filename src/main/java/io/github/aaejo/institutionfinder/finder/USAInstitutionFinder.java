@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.retry.support.RetryTemplate;
+import org.springframework.scheduling.annotation.Async;
 
 import io.github.aaejo.institutionfinder.messaging.producer.InstitutionsProducer;
 import io.github.aaejo.messaging.records.Institution;
@@ -46,6 +47,7 @@ public class USAInstitutionFinder implements InstitutionFinder {
      * Produce institutions from College Navigator, using the program codes
      * specified in {@code USAInstitutionFinder.PROGRAMS}.
      */
+    @Async
     @Override
     public void produceInstitutions() {
         log.info("Producing institutions for {} US states and/or territories", STATES.length);
