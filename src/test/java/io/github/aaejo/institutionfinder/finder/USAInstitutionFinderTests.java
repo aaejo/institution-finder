@@ -12,7 +12,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.jsoup.Connection;
@@ -78,10 +77,7 @@ public class USAInstitutionFinderTests {
                 .data(eq("id"), anyString())
                 .get())
             .thenThrow(new IOException()) // Throw first time
-            .thenReturn(Jsoup.parse(      // Succeed second time
-                    new File("src/test/resources/collegenavigator/110635.html"),
-                    "UTF-8",
-                    "https://nces.ed.gov/collegenavigator/"));
+            .thenReturn(Jsoup.connect("https://nces.ed.gov/collegenavigator/?id=110635").get()); // Succeed second time
         String schoolName = "University of California-Berkeley";
         String schoolId = "110635";
         Institution expected = new Institution(
@@ -147,10 +143,7 @@ public class USAInstitutionFinderTests {
                 .data("s", "AL")
                 .data("pg", "2")
                 .get())
-            .thenReturn(Jsoup.parse(
-                    new File("src/test/resources/collegenavigator/AS.html"), // Using AS as exemplar of page with no results
-                    "UTF-8",
-                    "https://nces.ed.gov/collegenavigator/"));
+            .thenReturn(Jsoup.connect("https://nces.ed.gov/collegenavigator/?s=AL&p=38.0104+38.0103+38.0102+38.0101+38.0199&pg=2").get());
 
         usaFinder.produceStateInstitutions("AL");
 
@@ -331,10 +324,7 @@ public class USAInstitutionFinderTests {
                 .data("pg", "5")
                 .get())
             .thenThrow(new IOException())
-            .thenReturn(Jsoup.parse(
-                new File("src/test/resources/collegenavigator/NY5.html"),
-                "UTF-8",
-                "https://nces.ed.gov/collegenavigator/"));
+            .thenReturn(Jsoup.connect("https://nces.ed.gov/collegenavigator/?s=NY&p=38.0104+38.0103+38.0102+38.0101+38.0199&pg=5").get());
 
         usaFinder.produceStateInstitutions("NY");
 
@@ -349,10 +339,7 @@ public class USAInstitutionFinderTests {
                 .newRequest()
                 .data(eq("id"), anyString())
                 .get())
-            .thenReturn(Jsoup.parse(
-                    new File("src/test/resources/collegenavigator/110635.html"),
-                    "UTF-8",
-                    "https://nces.ed.gov/collegenavigator/"));
+            .thenReturn(Jsoup.connect("https://nces.ed.gov/collegenavigator/?id=110635").get());
     }
 
     /**
@@ -376,10 +363,7 @@ public class USAInstitutionFinderTests {
                 .data("s", "AS")
                 .data("pg", "1")
                 .get())
-            .thenReturn(Jsoup.parse(
-                    new File("src/test/resources/collegenavigator/AS.html"),
-                    "UTF-8",
-                    "https://nces.ed.gov/collegenavigator/"));
+            .thenReturn(Jsoup.connect("https://nces.ed.gov/collegenavigator/?s=AS&p=38.0104+38.0103+38.0102+38.0101+38.0199&pg=1").get());
     }
 
     /**
@@ -392,10 +376,7 @@ public class USAInstitutionFinderTests {
                 .data("s", "AL")
                 .data("pg", "1")
                 .get())
-            .thenReturn(Jsoup.parse(
-                    new File("src/test/resources/collegenavigator/AL.html"),
-                    "UTF-8",
-                    "https://nces.ed.gov/collegenavigator/"));
+            .thenReturn(Jsoup.connect("https://nces.ed.gov/collegenavigator/?s=AL&p=38.0104+38.0103+38.0102+38.0101+38.0199&pg=1").get());
     }
 
     /**
@@ -409,10 +390,7 @@ public class USAInstitutionFinderTests {
                     .data("s", "NY")
                     .data("pg", Integer.toString(i))
                     .get())
-                .thenReturn(Jsoup.parse(
-                        new File("src/test/resources/collegenavigator/NY" + i + ".html"),
-                        "UTF-8",
-                        "https://nces.ed.gov/collegenavigator/"));
+                .thenReturn(Jsoup.connect("https://nces.ed.gov/collegenavigator/?s=NY&p=38.0104+38.0103+38.0102+38.0101+38.0199&pg=" + i).get());
         }
     }
 }
