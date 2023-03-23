@@ -143,7 +143,7 @@ public class USAInstitutionFinder implements InstitutionFinder {
                                         .getElementsByAttribute("href")
                                         .first();
                 String schoolName = schoolInfoLink.text();
-                String schoolId = new URIBuilder(URI.create(schoolInfoLink.attr("abs:href")))
+                String schoolId = new URIBuilder(URI.create(schoolInfoLink.absUrl("href")))
                         .getQueryParams().stream()
                         .filter(p -> p.getName().equals("id"))
                         .findFirst().get().getValue();
