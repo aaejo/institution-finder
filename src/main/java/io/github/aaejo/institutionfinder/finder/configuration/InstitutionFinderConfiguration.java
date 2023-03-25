@@ -32,7 +32,7 @@ public class InstitutionFinderConfiguration {
     @Bean
     public InstitutionFinder institutionFinder() {
         if (properties.country() == SupportedCountry.USA) {
-            if (properties.registryURL() == null) {
+            if (properties.registryUrl() == null) {
                 throw new UnsatisfiedDependencyException(
                         null,
                         "institutionFinder",
@@ -41,7 +41,7 @@ public class InstitutionFinderConfiguration {
             }
 
             // All configuration for the Jsoup client for the USA Finder can be done here before injection.
-            Connection connection = Jsoup.connect(properties.registryURL().toString());
+            Connection connection = Jsoup.connect(properties.registryUrl().toString());
 
             RetryTemplate retryTemplate = RetryTemplate.builder()
                                             .maxAttempts(2) // Initial + 1 retry

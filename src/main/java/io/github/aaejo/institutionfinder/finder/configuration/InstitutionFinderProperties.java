@@ -5,5 +5,5 @@ import java.net.URI;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "aaejo.jds.institution-finder")
-public record InstitutionFinderProperties(SupportedCountry country, URI registryURL) {
+public record InstitutionFinderProperties(SupportedCountry country, URI registryUrl) {
 }
