@@ -2,79 +2,79 @@
     {
         "name": "Australian National University",
         "country": "Australia",
-        "address": "146 Ellery Cres, Acton ACT 2601",
+        "address": "146 Ellery Cres, Acton, Australian Capital Territory, 2601",
         "website": "https://philosophy.cass.anu.edu.au/people/academics"
     },
     {
         "name": "Macquarie University",
         "country": "Australia",
-        "address": "18 Wally's Walk, Macquarie Park NSW 2113",
+        "address": "18 Wally's Walk, Macquarie Park, New South Wales, 2113",
         "website": "https://www.mq.edu.au/faculty-of-arts/departments-and-schools/department-of-philosophy/our-people"
     },
     {
         "name": "University of New England",
         "country": "Australia",
-        "address": "211 Church St, Parramatta NSW 2150",
+        "address": "211 Church St, Parramatta, New South Wales, 2150",
         "website": "https://www.une.edu.au/about-une/faculty-of-humanities-arts-social-sciences-and-education/hass/our-staff/accordion-academic-staff/philosophy"
     },
     {
         "name": "University of Sydney", 
         "country": "Australia",
-        "address": "University Pl, The University of Sydney NSW 2006",
+        "address": "University Pl, The University of Sydney, New South Wales 2006",
         "website": "https://www.sydney.edu.au/arts/schools/school-of-humanities/philosophy.html"
     },
     {
         "name": "University of Wollongones",
         "country": "Australia",
-        "address": "Northfields Ave, Wollongong NSW 2522",
+        "address": "Northfields Ave, Wollongong, New South Wales, 2522",
         "website": "https://www.uow.edu.au/the-arts-social-sciences-humanities/schools-entities/hsi/our-people/"
     },
     {
         "name": "Western Sydney Unversity", 
         "country": "Australia",
-        "address": "Horsley Rd &, Bullecourt Ave, Milperra NSW 2214",
+        "address": "Horsley Rd &, Bullecourt Ave, Milperra, New South Wales, 2214",
         "website": "https://www.westernsydney.edu.au/philosophy/home/members"
     },
     {
         "name": "The University of Queensland", 
         "country": "Australia",
-        "address": "St Lucia QLD 4072",
+        "address": "St Lucia, Queensland, 4072",
         "website": "https://hpi.uq.edu.au/team/philosophy-academic-staff"
     },
     {
         "name": "University of Adelaide ", 
         "country": "Australia",
-        "address": "Adelaide SA 5005",
+        "address": "Adelaide, South Australia, 5005",
         "website": "https://able.adelaide.edu.au/humanities/department-of-philosophy#our-people"
     },
     {
         "name": "Flinders University", 
         "country": "Australia",
-        "address": "182 Victoria Square, Adelaide SA 5000",
+        "address": "182 Victoria Square, Adelaide, South Australia, 5000",
         "website": "https://www.flinders.edu.au/directory/index.cfm/affiliation1/list?structureid=20313&structureheader=Teaching+Section&structurename=Philosophy"
     },
     {
         "name": "University of Tasmania", 
         "country": "Australia",
-        "address": "Churchill Ave, Hobart TAS 7005",
+        "address": "Churchill Ave, Hobart, Tasmania, 7005",
         "website": "https://www.utas.edu.au/humanities/people/philosophy-and-gender-studies"
     },
     {
         "name": "Federation University", 
         "country": "Australia",
-        "address": "University Dr, Mount Helen VIC 3350",
+        "address": "University Dr, Mount Helen, Victoria, 3350",
         "website": "https://federation.edu.au/institutes-and-schools/ieac/staff-profiles/academic-staff"
     },
     {
         "name": "Deakin University", 
         "country": "Australia",
-        "address": "75 Pigdons Rd, Waurn Ponds VIC 3216",
+        "address": "75 Pigdons Rd, Waurn Ponds, Victoria, 3216",
         "website": "https://blogs.deakin.edu.au/philosophy/about/staff/"
     },
     {
         "name": "La Trobe University", 
         "country": "Australia",
-        "address": "Plenty Road, Bundoora VIC 3086",
+        "address": "Plenty Road, Bundoora, Victoria, 3086",
         "website": "https://www.latrobe.edu.au/politics-media-philosophy/about-us/staff"
     },
     {
@@ -86,31 +86,31 @@
     {
         "name": "Swinburne University of Technology", 
         "country": "Australia",
-        "address": "John St, Hawthorn VIC 3122",
+        "address": "John St, Hawthorn, Victoria, 3122",
         "website": "https://www.swinburne.edu.au/about/our-structure/organisational-structure/schools-departments/school-social-sciences-media-film-education/department-humanities-social-sciences#people-department-staff"
     },
     {
         "name": "Murdoch University", 
         "country": "Australia",
-        "address": "90 South St, Murdoch WA 6150",
+        "address": "90 South St, Murdoch, West Australia 6150",
         "website": "http://philosophy.murdoch.edu.au/staff.html"
     },
     {
         "name": "University of Western Australia", 
         "country": "Australia",
-        "address": "35 Stirling Hwy, Crawley WA 6009",
+        "address": "35 Stirling Hwy, Crawley, West Australia 6009",
         "website": "https://research-repository.uwa.edu.au/en/organisations/discipline-of-philosophy/persons/"
     },
     {
         "name": "Australian Catholic University", 
         "country": "Australia",
-        "address": "Locked Bag 4115 DC, Fitzroy Victoria 3065",
+        "address": "Locked Bag 4115 DC, Fitzroy, Victoria, 3065",
         "website": "https://www.acu.edu.au/about-acu/faculties-directorates-and-staff/faculty-of-theology-and-philosophy/school-of-philosophy/school-staff"
     },
     {
         "name": "The University of Notre Dame Australia", 
         "country": "Australia",
-        "address": "32 Mouat St, Fremantle WA 6160",
+        "address": "32 Mouat St, Fremantle, West Australia, 6160",
         "website": "https://www.notredame.edu.au/about/schools/sydney/philosophy-and-theology/staff"
     }
 ]
