@@ -2,7 +2,6 @@ package io.github.aaejo.institutionfinder.web;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.aaejo.institutionfinder.finder.InstitutionFinder;
@@ -10,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping
 @Profile("default")
 public class Controller {
 
