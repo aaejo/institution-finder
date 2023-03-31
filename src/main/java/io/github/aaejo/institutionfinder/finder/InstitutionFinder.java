@@ -4,6 +4,8 @@ import org.springframework.scheduling.annotation.Async;
 
 /**
  * Base interface for international InstitutionFinder implementations
+ * 
+ * @author Omri Harary
  */
 public interface InstitutionFinder {
 

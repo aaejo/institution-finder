@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * USA-specific InstitutionFinder implementation utilizing NCES's College Navigator service.
+ * 
+ * @author Omri Harary
  */
 @Slf4j
 public class USAInstitutionFinder implements InstitutionFinder {

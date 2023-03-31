@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * JSON file-based InstitutionFinder implementation.
+ * 
+ * @author Omri Harary
  */
 @Slf4j
 public class JsonInstitutionFinder implements InstitutionFinder {

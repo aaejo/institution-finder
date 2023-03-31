@@ -16,6 +16,9 @@ import io.github.aaejo.institutionfinder.finder.JsonInstitutionFinder;
 import io.github.aaejo.institutionfinder.finder.USAInstitutionFinder;
 import io.github.aaejo.institutionfinder.messaging.producer.InstitutionsProducer;
 
+/**
+ * @author Omri Harary
+ */
 @Configuration
 @EnableConfigurationProperties(InstitutionFinderProperties.class)
 public class InstitutionFinderConfiguration {

@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 import io.github.aaejo.institutionfinder.finder.InstitutionFinder;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * @author Omri Harary
+ */
 @Slf4j
 @RestController
 @Profile("default")
