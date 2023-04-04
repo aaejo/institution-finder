@@ -53,7 +53,8 @@ public class InstitutionFinderConfiguration {
 
             return new USAInstitutionFinder(institutionsProducer, connection, retryTemplate);
         } else {
-            return new JsonInstitutionFinder(properties.country().name(), institutionsProducer, objectMapper);
+            return new JsonInstitutionFinder(properties.country().name(), institutionsProducer, objectMapper,
+                    properties.file());
         }
     }
 }

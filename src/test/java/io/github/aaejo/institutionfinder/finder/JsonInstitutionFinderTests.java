@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +22,7 @@ public class JsonInstitutionFinderTests {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final JsonInstitutionFinder jsonInstitutionFinder = new JsonInstitutionFinder("Canada",
-            institutionsProducer, objectMapper);
+            institutionsProducer, objectMapper, Optional.empty());
 
     @Test
     void produceInstitutionsJson_notJsonList_illegalStateException() {

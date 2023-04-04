@@ -2,6 +2,10 @@ package io.github.aaejo.institutionfinder.finder;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Async;
@@ -25,22 +29,50 @@ public class JsonInstitutionFinder implements InstitutionFinder {
     private final String country;
     private final InstitutionsProducer institutionsProducer;
     private final ObjectMapper objectMapper;
+    private final Optional<String> file;
 
-    public JsonInstitutionFinder(String country, InstitutionsProducer institutionsProducer, ObjectMapper objectMapper) {
+    public JsonInstitutionFinder(String country, InstitutionsProducer institutionsProducer, ObjectMapper objectMapper, Optional<String> file) {
         this.country = country.toLowerCase();
         this.institutionsProducer = institutionsProducer;
         this.objectMapper = objectMapper;
+        this.file = file;
     }
 
     /**
-     * Produce institutions from a JSON file in the classpath, associated with this
-     * institution finder instance's country.
+     * Produce institutions from a configured JSON file or one in the classpath
+     * associated with this institution finder instance's country.
      */
     @Async
     @Override
     public void produceInstitutions() {
-        String fileName = country + ".json";
-        try (InputStream inputStream = new ClassPathResource(fileName).getInputStream();) {
+        String defaultFileName = country + ".json";
+        Path dataFile = null;
+        boolean useClasspathData = true;
+        if (file.isPresent()) {
+            dataFile = Paths.get(file.get());
+
+            if (Files.isDirectory(dataFile)) {
+                // If a directory was provided, append default file name to it
+                dataFile = dataFile.resolve(defaultFileName);
+                log.warn(
+                        "Configured institutions file path was a directory, will attempt to find a file named {} in that directory",
+                        defaultFileName);
+            }
+
+            if (Files.exists(dataFile)) {
+                log.info("Using {} as institution data source", dataFile.toString());
+                useClasspathData = false;
+            } else {
+                log.warn("Configured institutions file path not found, will use file named {} on the classpath instead",
+                        defaultFileName);
+                useClasspathData = true;
+            }
+        } else {
+            log.info("Using {} on the classpath as institution data source", defaultFileName);
+        }
+
+        try (InputStream inputStream = useClasspathData ? new ClassPathResource(defaultFileName).getInputStream()
+                : Files.newInputStream(dataFile);) {
             produceInstitutionsJson(inputStream);
         } catch (IOException e) {
             log.error("An error occurred processing the institutions JSON file", e);

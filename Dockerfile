@@ -9,6 +9,7 @@ WORKDIR /opt/jds
 COPY --from=unpacker /tmp/dependencies/ ./
 COPY --from=unpacker /tmp/spring-boot-loader/ ./
 COPY --from=unpacker /tmp/snapshot-dependencies/ ./
+COPY target/classes/*.json ./data/
 COPY --from=unpacker /tmp/application/ ./
 ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
 
