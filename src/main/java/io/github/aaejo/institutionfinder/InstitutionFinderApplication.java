@@ -1,6 +1,5 @@
 package io.github.aaejo.institutionfinder;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,16 +11,13 @@ import io.github.aaejo.institutionfinder.finder.InstitutionFinder;
 @SpringBootApplication
 public class InstitutionFinderApplication {
 
-    @Autowired
-    private InstitutionFinder institutionFinder;
-
     public static void main(String[] args) {
         SpringApplication.run(InstitutionFinderApplication.class, args);
     }
 
     @Bean
-    @Profile("default") // Don't run from test(s)
-    public ApplicationRunner runner() {
+    @Profile("console")
+    public ApplicationRunner runner(InstitutionFinder institutionFinder) {
         return args -> {
             System.out.println("Hit Enter to send...");
             System.in.read();

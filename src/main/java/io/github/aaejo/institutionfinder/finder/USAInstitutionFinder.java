@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.retry.support.RetryTemplate;
+import org.springframework.scheduling.annotation.Async;
 
 import io.github.aaejo.institutionfinder.messaging.producer.InstitutionsProducer;
 import io.github.aaejo.messaging.records.Institution;
@@ -16,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * USA-specific InstitutionFinder implementation utilizing NCES's College Navigator service.
+ * 
+ * @author Omri Harary
  */
 @Slf4j
 public class USAInstitutionFinder implements InstitutionFinder {
@@ -46,6 +49,7 @@ public class USAInstitutionFinder implements InstitutionFinder {
      * Produce institutions from College Navigator, using the program codes
      * specified in {@code USAInstitutionFinder.PROGRAMS}.
      */
+    @Async
     @Override
     public void produceInstitutions() {
         log.info("Producing institutions for {} US states and/or territories", STATES.length);
@@ -141,7 +145,7 @@ public class USAInstitutionFinder implements InstitutionFinder {
                                         .getElementsByAttribute("href")
                                         .first();
                 String schoolName = schoolInfoLink.text();
-                String schoolId = new URIBuilder(URI.create(schoolInfoLink.attr("abs:href")))
+                String schoolId = new URIBuilder(URI.create(schoolInfoLink.absUrl("href")))
                         .getQueryParams().stream()
                         .filter(p -> p.getName().equals("id"))
                         .findFirst().get().getValue();

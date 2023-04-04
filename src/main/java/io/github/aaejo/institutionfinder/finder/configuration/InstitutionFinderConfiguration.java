@@ -16,6 +16,9 @@ import io.github.aaejo.institutionfinder.finder.JsonInstitutionFinder;
 import io.github.aaejo.institutionfinder.finder.USAInstitutionFinder;
 import io.github.aaejo.institutionfinder.messaging.producer.InstitutionsProducer;
 
+/**
+ * @author Omri Harary
+ */
 @Configuration
 @EnableConfigurationProperties(InstitutionFinderProperties.class)
 public class InstitutionFinderConfiguration {
@@ -32,7 +35,7 @@ public class InstitutionFinderConfiguration {
     @Bean
     public InstitutionFinder institutionFinder() {
         if (properties.country() == SupportedCountry.USA) {
-            if (properties.registryURL() == null) {
+            if (properties.registryUrl() == null) {
                 throw new UnsatisfiedDependencyException(
                         null,
                         "institutionFinder",
@@ -41,7 +44,7 @@ public class InstitutionFinderConfiguration {
             }
 
             // All configuration for the Jsoup client for the USA Finder can be done here before injection.
-            Connection connection = Jsoup.connect(properties.registryURL().toString());
+            Connection connection = Jsoup.connect(properties.registryUrl().toString());
 
             RetryTemplate retryTemplate = RetryTemplate.builder()
                                             .maxAttempts(2) // Initial + 1 retry
@@ -50,7 +53,8 @@ public class InstitutionFinderConfiguration {
 
             return new USAInstitutionFinder(institutionsProducer, connection, retryTemplate);
         } else {
-            return new JsonInstitutionFinder(properties.country().name(), institutionsProducer, objectMapper);
+            return new JsonInstitutionFinder(properties.country().name(), institutionsProducer, objectMapper,
+                    properties.file());
         }
     }
 }
