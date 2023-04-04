@@ -3,6 +3,7 @@ package io.github.aaejo.institutionfinder.finder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -59,7 +60,7 @@ public class JsonInstitutionFinder implements InstitutionFinder {
                         defaultFileName);
             }
 
-            if (Files.exists(dataFile)) {
+            if (Files.exists(dataFile, LinkOption.NOFOLLOW_LINKS)) {
                 log.info("Using {} as institution data source", dataFile.toString());
                 useClasspathData = false;
             } else {
