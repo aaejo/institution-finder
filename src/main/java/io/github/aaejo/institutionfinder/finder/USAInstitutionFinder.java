@@ -13,6 +13,8 @@ import org.springframework.scheduling.annotation.Async;
 
 import io.github.aaejo.institutionfinder.messaging.producer.InstitutionsProducer;
 import io.github.aaejo.messaging.records.Institution;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -26,6 +28,8 @@ public class USAInstitutionFinder implements InstitutionFinder {
     private final InstitutionsProducer institutionsProducer;
     private final Connection registryConnection;
     private final RetryTemplate retryTemplate;
+
+    private Counter institutionCounter;
 
     public static final String[] STATES = { "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI",
             "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH",
@@ -43,6 +47,16 @@ public class USAInstitutionFinder implements InstitutionFinder {
         this.institutionsProducer = institutionsProducer;
         this.registryConnection = registryConnection;
         this.retryTemplate = retryTemplate;
+    }
+
+    public USAInstitutionFinder(InstitutionsProducer institutionsProducer, Connection registryConnection,
+            RetryTemplate retryTemplate, MeterRegistry registry) {
+        this(institutionsProducer, registryConnection, retryTemplate);
+
+        institutionCounter = Counter
+                .builder("jds.institution-finder.institutions")
+                .tag("country", "usa")
+                .register(registry);
     }
 
     /**
@@ -155,6 +169,7 @@ public class USAInstitutionFinder implements InstitutionFinder {
                 Institution institution = getInstitutionDetails(schoolName, schoolId);
                 if (institution != null) {
                     institutionsProducer.send(institution);
+                    institutionCounter.increment();
                 }
             }
         } while (hasNextPage);

@@ -15,6 +15,7 @@ import io.github.aaejo.institutionfinder.finder.InstitutionFinder;
 import io.github.aaejo.institutionfinder.finder.JsonInstitutionFinder;
 import io.github.aaejo.institutionfinder.finder.USAInstitutionFinder;
 import io.github.aaejo.institutionfinder.messaging.producer.InstitutionsProducer;
+import io.micrometer.core.instrument.MeterRegistry;
 
 /**
  * @author Omri Harary
@@ -33,7 +34,7 @@ public class InstitutionFinderConfiguration {
     private ObjectMapper objectMapper;
 
     @Bean
-    public InstitutionFinder institutionFinder() {
+    public InstitutionFinder institutionFinder(MeterRegistry registry) {
         if (properties.country() == SupportedCountry.USA) {
             if (properties.registryUrl() == null) {
                 throw new UnsatisfiedDependencyException(
@@ -51,10 +52,10 @@ public class InstitutionFinderConfiguration {
                                             .fixedBackoff(2000L)
                                             .build();
 
-            return new USAInstitutionFinder(institutionsProducer, connection, retryTemplate);
+            return new USAInstitutionFinder(institutionsProducer, connection, retryTemplate, registry);
         } else {
             return new JsonInstitutionFinder(properties.country().name(), institutionsProducer, objectMapper,
-                    properties.file());
+                    properties.file(), registry);
         }
     }
 }
