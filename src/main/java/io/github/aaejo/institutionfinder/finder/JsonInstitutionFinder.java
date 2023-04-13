@@ -17,6 +17,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.aaejo.institutionfinder.messaging.producer.InstitutionsProducer;
 import io.github.aaejo.messaging.records.Institution;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -32,11 +34,23 @@ public class JsonInstitutionFinder implements InstitutionFinder {
     private final ObjectMapper objectMapper;
     private final Optional<String> file;
 
+    private Counter institutionCounter;
+
     public JsonInstitutionFinder(String country, InstitutionsProducer institutionsProducer, ObjectMapper objectMapper, Optional<String> file) {
         this.country = country.toLowerCase();
         this.institutionsProducer = institutionsProducer;
         this.objectMapper = objectMapper;
         this.file = file;
+    }
+
+    public JsonInstitutionFinder(String country, InstitutionsProducer institutionsProducer, ObjectMapper objectMapper,
+            Optional<String> file, MeterRegistry registry) {
+        this(country, institutionsProducer, objectMapper, file);
+
+        institutionCounter = Counter
+                .builder("jds.institution-finder.institutions")
+                .tag("country", this.country)
+                .register(registry);
     }
 
     /**
@@ -97,6 +111,7 @@ public class JsonInstitutionFinder implements InstitutionFinder {
             while (parser.nextToken() != JsonToken.END_ARRAY) {
                 Institution institution = this.objectMapper.readValue(parser, Institution.class);
                 institutionsProducer.send(institution);
+                institutionCounter.increment();
             }
         }
     }
