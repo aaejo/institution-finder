@@ -21,6 +21,7 @@ import org.springframework.retry.support.RetryTemplate;
 
 import io.github.aaejo.institutionfinder.messaging.producer.InstitutionsProducer;
 import io.github.aaejo.messaging.records.Institution;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 
 public class USAInstitutionFinderTests {
 
@@ -30,8 +31,9 @@ public class USAInstitutionFinderTests {
                                                 .maxAttempts(2)
                                                 .fixedBackoff(1L) // Minimal delay in tests
                                                 .build();
-
-    private final USAInstitutionFinder usaFinder = new USAInstitutionFinder(institutionsProducer, connection, retryTemplate);
+    private final SimpleMeterRegistry registry = new SimpleMeterRegistry();
+    private final USAInstitutionFinder usaFinder = new USAInstitutionFinder(institutionsProducer, connection,
+            retryTemplate, registry);
 
     /**
      * Successful case of fetching institution details.

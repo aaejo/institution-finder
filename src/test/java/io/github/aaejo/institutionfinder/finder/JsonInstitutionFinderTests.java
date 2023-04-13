@@ -15,14 +15,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.aaejo.institutionfinder.messaging.producer.InstitutionsProducer;
 import io.github.aaejo.messaging.records.Institution;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 
 public class JsonInstitutionFinderTests {
 
     private final InstitutionsProducer institutionsProducer = mock(InstitutionsProducer.class);
     private final ObjectMapper objectMapper = new ObjectMapper();
-
+    private final SimpleMeterRegistry registry = new SimpleMeterRegistry();
     private final JsonInstitutionFinder jsonInstitutionFinder = new JsonInstitutionFinder("Canada",
-            institutionsProducer, objectMapper, Optional.empty());
+            institutionsProducer, objectMapper, Optional.empty(), registry);
 
     @Test
     void produceInstitutionsJson_notJsonList_illegalStateException() {
